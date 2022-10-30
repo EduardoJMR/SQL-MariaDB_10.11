@@ -5,7 +5,7 @@
 
 ### Datasets
 
-<h5> CREATE TABLE authors (
+<h6> CREATE TABLE authors (
  au_id CHAR(3) NOT NULL,
  au_fname VARCHAR(15) NOT NULL,
  au_lname VARCHAR(15) NOT NULL,
@@ -17,23 +17,23 @@
  CONSTRAINT authors_pk
  PRIMARY KEY (au_id),
  CONSTRAINT authors_unique1
- UNIQUE (au_fname, au_lname)); </h5>
+ UNIQUE (au_fname, au_lname)); </h6>
  
-<h5>INSERT INTO authors(au_id,au_fname,au_lname,phone,address,city,state,zip)
- values ('A07','Paddy',"O'Furniture",'941-925-0752','1442 Main St','Sarasota','FL','34236'); </h5>
+<h6>INSERT INTO authors(au_id,au_fname,au_lname,phone,address,city,state,zip)
+ values ('A07','Paddy',"O'Furniture",'941-925-0752','1442 Main St','Sarasota','FL','34236'); </h6>
 
-<h5>CREATE TABLE publishers (
+<h6>CREATE TABLE publishers (
  pub_id CHAR(3) NOT NULL,
  pub_name VARCHAR(20) NOT NULL,
  city VARCHAR(15) NOT NULL,
  state CHAR(2) ,
  country VARCHAR(15) NOT NULL,
- CONSTRAINT publishers_pk PRIMARY KEY (pub_id)); </h5>
+ CONSTRAINT publishers_pk PRIMARY KEY (pub_id)); </h6>
 
-<h5>INSERT INTO publishers (pub_id,pub_name,city,state,country)
-values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h5>
+<h6>INSERT INTO publishers (pub_id,pub_name,city,state,country)
+values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h6>
 
-<h5>CREATE TABLE titles(
+<h6>CREATE TABLE titles(
  title_id CHAR(3) NOT NULL,
  title_name VARCHAR(40) NOT NULL,
  type VARCHAR(10) ,
@@ -52,12 +52,12 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h5>
  CONSTRAINT price_chk CHECK (price >= 0.00 AND price < 100.00),
  CONSTRAINT sales_chk CHECK (sales >= 0),
  CONSTRAINT pubdate_chk CHECK (pubdate >= '1950-01-01'),
- CONSTRAINT title_name_chk CHECK (title_name <> ''AND contract >= 0));</h5>
+ CONSTRAINT title_name_chk CHECK (title_name <> ''AND contract >= 0));</h6>
  
-<h5> INSERT INTO titles (title_id,title_name,type,pub_id,pages,price,sales,pubdate,contract)
- values ('T13',"What Are The Civilian Applications?",'history','P03','802','29.99','10467','1999-05-31','1');</h5>
+<h6> INSERT INTO titles (title_id,title_name,type,pub_id,pages,price,sales,pubdate,contract)
+ values ('T13',"What Are The Civilian Applications?",'history','P03','802','29.99','10467','1999-05-31','1');</h6>
  
- <h5>CREATE TABLE title_authors (
+ <h6>CREATE TABLE title_authors (
  title_id CHAR(3) NOT NULL,
  au_id CHAR(3) NOT NULL,
  au_order SMALLINT NOT NULL,
@@ -69,27 +69,27 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h5>
  REFERENCES titles(title_id),
  CONSTRAINT title_authors_fk2
  FOREIGN KEY (au_id)
- REFERENCES authors (au_id));</h5>
+ REFERENCES authors (au_id));</h6>
  
-<h5>INSERT INTO title_authors (title_id,au_id,au_order,royalty_share)
- values ('T13','A01',1,1.00);</h5>
+<h6>INSERT INTO title_authors (title_id,au_id,au_order,royalty_share)
+ values ('T13','A01',1,1.00);</h6>
  
- <h5>CREATE TABLE royalties (
+ <h6>CREATE TABLE royalties (
  title_id CHAR(3) NOT NULL,
  advance DECIMAL(9,2),
  royalty_rate DECIMAL(5,2),
  CONSTRAINT royalties_pk PRIMARY KEY (title_id),
  CONSTRAINT royalties_title_id_fk
  FOREIGN KEY (title_id)
- REFERENCES titles(title_id));</h5>
+ REFERENCES titles(title_id));</h6>
  
- <h5>INSERT INTO royalties (title_id,advance,royalty_rate)
- values ('T13',20000.00,0.06);</h5>
+ <h6>INSERT INTO royalties (title_id,advance,royalty_rate)
+ values ('T13',20000.00,0.06);</h6>
  
- <h5>CREATE TABLE test_scores (
- name varchar(20), test varchar(20), score tinyint );</h5>
+ <h6>CREATE TABLE test_scores (
+ name varchar(20), test varchar(20), score tinyint );</h6>
  
- <h5>INSERT INTO test_scores VALUES
+ <h6>INSERT INTO test_scores VALUES
  ("Steve", "SQL", 75),
  ("Robert", "SQL", 43),
  ("Tracy", "SQL", 56),
@@ -97,15 +97,15 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h5>
  ("Steve", "Tuning", 83),
  ("Robert", "Tuning", 31),
  ("Tracy", "Tuning", 88),
- ("Tatiana", "Tuning", 83);</h5>
+ ("Tatiana", "Tuning", 83);</h6>
  
- <h5>CREATE TABLE IF NOT EXISTS emp (
+ <h6>CREATE TABLE IF NOT EXISTS emp (
  empno DECIMAL(4), ename VARCHAR(10), job VARCHAR(9),
  mgr DECIMAL(4), hiredate CHAR(10), sal DECIMAL(7,2),
  comm DECIMAL(7,2), deptno DECIMAL(2),
- CONSTRAINT pk_emp PRIMARY KEY (empno));</h5>
+ CONSTRAINT pk_emp PRIMARY KEY (empno));</h6>
  
- <h5>INSERT INTO emp VALUES
+ <h6>INSERT INTO emp VALUES
  (7369, 'SMITH', 'CLERK', 7902, '1980-12-17', 800, NULL, 20),
  (7499, 'ALLEN', 'SALESMAN', 7698, '1981-02-20', 1600, 300, 30),
  (7521, 'WARD', 'SALESMAN', 7698, '1981-02-22', 1250, 500, 30),
@@ -119,23 +119,23 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h5>
  (7876, 'ADAMS', 'CLERK', 7788, '1987-07-13', 1100, NULL, 20),
  (7900, 'JAMES', 'CLERK', 7698, '1981-12-03', 950, NULL, 30),
  (7902, 'FORD', 'ANALYST', 7566, '1981-12-03', 3000, NULL, 20),
- (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, NULL, 10) ;</h5>
+ (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, NULL, 10) ;</h6>
  
- <h5>CREATE TABLE new_publishers (
+ <h6>CREATE TABLE new_publishers (
  pub_id CHAR(3) NOT NULL,
  pub_name VARCHAR(20) NOT NULL,
  city VARCHAR(15) NOT NULL,
  state CHAR(2),
  country VARCHAR(15) NOT NULL,
- CONSTRAINT publishers_pk PRIMARY KEY (pub_id));</h5>
+ CONSTRAINT publishers_pk PRIMARY KEY (pub_id));</h6>
  
- <h5>INSERT INTO new_publishers (pub_id,pub_name,city,state,country)
+ <h6>INSERT INTO new_publishers (pub_id,pub_name,city,state,country)
  values ('P11','Community Press','Los Angeles','CA','USA'),
  ('P12','Wiley and Sons','Pittsburgh','PA','USA'),
  INSERT INTO new_publishers (pub_id,pub_name,city,country)
- VALUES ('P13','Verlang','Berlin','Germany'), ('P14','Springer','Berlin','Germany');</h5>
+ VALUES ('P13','Verlang','Berlin','Germany'), ('P14','Springer','Berlin','Germany');</h6>
 
-<h5>CREATE TABLE employee (
+<h6>CREATE TABLE employee (
  emp_id CHAR(3) NOT NULL,
  emp_name VARCHAR(40) NOT NULL,
  boss_id CHAR(3),
@@ -145,13 +145,13 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h5>
  (CAST(SUBSTR(emp_id, 2, 2) AS SIGNED) BETWEEN 0 AND 99)),
  CONSTRAINT boss_id_chk
  CHECK ((SUBSTR(boss_id, 1, 1) = 'E') AND (CAST(SUBSTR(boss_id, 2, 2)
- AS SIGNED) BETWEEN 0 AND 99)));</h5>
+ AS SIGNED) BETWEEN 0 AND 99)));</h6>
  
-<h5>INSERT INTO employee (emp_id,emp_name)
+<h6>INSERT INTO employee (emp_id,emp_name)
  VALUES ('E01','Lord Copper');
 INSERT INTO employee (emp_id,emp_name,boss_id)
  VALUES ('E02','Jocelyn Hitchcock','E01'), 
- ('E03','Mr. Salter','E01'),('E04','William Boot','E03'),('E05','Mr. Corker','E03');</h5>
+ ('E03','Mr. Salter','E01'),('E04','William Boot','E03'),('E05','Mr. Corker','E03');</h6>
  
  
 
