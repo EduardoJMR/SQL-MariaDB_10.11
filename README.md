@@ -153,6 +153,63 @@ INSERT INTO employee (emp_id,emp_name,boss_id)
  VALUES ('E02','Jocelyn Hitchcock','E01'), 
  ('E03','Mr. Salter','E01'),('E04','William Boot','E03'),('E05','Mr. Corker','E03');</h6>
  
+### Getting data from a dataset
+ 
+#### SELECT y FROM 
+ 
+##### 1.	List the cities in which the authors live
+ 
+###### SELECT city FROM authors;
+ 
+##### 2.	List the name, surname, city, and state of the authors.
+
+###### SELECT au_fname, au_lname, city, state FROM authors;
+ 
+##### 3.	List city, state, country of publisher 
+ 
+###### SELECT city, state, country FROM publishers;
+ 
+##### 4. List all columns of the originator table.
+ 
+###### SELECT * FROM authors;
+ 
+#### Creating aliases with AS 
+ 
+##### 5.	List authors' first name, last name, city, state, and postcode by changing the name of all columns except state. 
+
+######	SELECT au_fname AS "First name",au_lname AS "Last name",city AS "City", state, zip "Postal code" FROM authors;
+ 
+#### Elimination of duplicates with DISTINCT
+
+##### 6.	List states in which the authors live
+ 
+######	SELECT state FROM authors;
+ 
+##### 7.	List states where authors live with no duplicates
+ 
+######	SELECT DISTINCT state FROM authors; 
+ 
+##### 8.	List cities and states in which the authors live
+ 
+######	SELECT city, state FROM authors;
+
+##### 9.	List cities and states where authors live without duplicates.
+ 
+######	SELECT DISTINCT city, state FROM authors;
+
+#### Sorting by ORDER BY 
+ 
+##### 10.	List name, surname, city, and state of the authors in ascending order.
+
+######	SELECT au_fname, au_lname, city, state FROM authors ORDER BY au_lname ASC;
+
+
+
+ 
+
+ 
+ 
+ 
  
 
 
