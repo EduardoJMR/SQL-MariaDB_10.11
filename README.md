@@ -203,19 +203,225 @@ INSERT INTO employee (emp_id,emp_name,boss_id)
 
 ######	SELECT au_fname, au_lname, city, state FROM authors ORDER BY au_lname ASC;
 
+##### 11.	List name, surname, city, and state of the authors in descending order of precedence.
 
+######	SELECT au_fname, au_lname, city, state FROM authors ORDER BY au_lname DESC;
 
- 
+##### 12.	List name, surname, city, and state of authors in ascending order by state and descending order by city.
 
- 
- 
- 
- 
+######	SELECT au_fname, au_lname, city, state FROM authors ORDER BY state ASC, city DESC;
 
+##### 13.	Sort by a column that does not appear in the table (zip)
 
+######	SELECT city, state FROM authors ORDER BY zip ASC;
 
+##### 14.	Sort by an expression associated with a column
 
+######	SELECT title_id, price, sales, price * sales AS Revenue FROM titles ORDER BY Revenue DESC;
 
+##### 15. Sort by an expression associated with a column with leading nulls
+
+######	SELECT title_id, price,sales, price * sales AS Revenue FROM titles ORDER BY Revenue IS NULL DESC, Revenue DESC;
+
+#### Row filtering with WHERE
+
+##### 16.	List authors whose surname is not Hull
+
+######	SELECT au_id, au_fname, au_lname FROM authors WHERE au_lname <> 'Hull';
+
+##### 17.	Listing books without a signed contract
+
+######	SELECT title_name, contract FROM titles WHERE contract = 0
+
+##### 18.	List titles published since 2001
+
+######	SELECT title_name, pubdate FROM titles WHERE pubdate >= '2001-01-01';
+
+##### 19.	List securities that have produced a profit in excess of 1,000,000. 
+
+######	SELECT title_name, price * sales AS "Revenue" FROM titles WHERE price * sales > 1000000;
+
+##### 20.	Error: An alias is made in the SELECT and referenced in WHERE. 
+
+######	SELECT sales AS copies_sold FROM titles WHERE copies_sold > 100000;
+
+#### Combination and negation of conditions with AND, OR, and NOT 
+
+##### 21.	Combination and negation of conditions with AND, OR, and NOT
+
+######	SELECT title_name, type, price FROM titles WHERE type = 'biography' AND price < 20;
+
+##### 22.	List authors whose surname begins with a letter between H and Z and whose status is not in California.
+
+######	SELECT au_fname, au_lname FROM authors WHERE au_lname >= 'H' AND au_lname <= 'Zz' AND state <> 'CA';
+
+##### 23.	List authors who live in New York State, Colorado, or San Francisco City.
+
+######	SELECT au_fname, au_lname, city, state FROM authors WHERE state in ('NY', 'CO') OR city='San Francisco';
+
+##### 24.	List all publishers
+
+######	SELECT pub_id, pub_name, state, country FROM publishers;
+
+##### 25.	List editors living or not living in California 
+
+######	SELECT pub_id, pub_name, state, country FROM publishers WHERE (state = 'CA') OR (state <> 'CA');
+
+##### 26.	List authors who do not live in California
+
+######	SELECT au_fname, au_lname, state FROM authors WHERE state <> 'CA';
+
+##### 27.	List books whose price is not less than 20 and which have sold more than 15,000 copies
+
+######	SELECT title_name, sales, price FROM titles WHERE NOT (price < 20) AND (sales > 15000);
+
+##### 28.	List books 1) whose topic is history or 2) whose topic is biography and their price is under 20
+
+######	SELECT title_id, type, price FROM titles WHERE type = 'history' OR type = 'biography' AND price < 20;
+
+##### 29.	List books 1) whose topic is history or biography AND 2) their price is under 20
+
+######	SELECT title_id, type, price FROM titles WHERE (type = 'history' OR type = 'biography') AND price < 20;
+
+##### 30.	For debugging
+
+######	SELECT type, type = 'history' AS "Hist?", type = 'biography' AS "Bio?", price, price < 20 AS "<20?" FROM titles;
+
+#### Pattern matching using LIKE
+
+##### 31.	List authors whose surname begins with Kel
+
+######	SELECT au_fname, au_lname FROM authors WHERE au_lname LIKE 'Kel%';
+
+##### 32.	List authors whose surnames have ll (ele, ele) in the third and fourth positions.
+
+######	SELECT au_fname, au_lname FROM authors WHERE au_lname LIKE '__ll%';
+
+##### 33.	List authors whose postcode starts with 94 
+
+######	SELECT au_fname, au_lname, city, state, zip FROM authors WHERE zip LIKE '94___';
+
+##### 34.	List authors whose phone does not begin with 212, 415, or 303.
+
+######	SELECT au_fname, au_lname, phone FROM authors WHERE phone NOT LIKE '212-___-____' AND phone NOT LIKE '415-___-%' AND phone NOT LIKE '303-%';
+
+##### 35.	List books whose title contains a %.
+
+######	SELECT title_name FROM titles WHERE title_name LIKE '%!%%' ESCAPE '!';
+
+#### Range filtering with BETWEEN
+
+##### 36.	Print names of books containing MO independently of upper/lower case letters
+
+######	SELECT au_fname, au_lname, zip FROM authors WHERE zip NOT BETWEEN '20000' AND '89999';
+
+#### Trimming characters with TRIM
+
+##### 37.	List authors' surnames, removing any capital H at the beginning.
+	
+######	SELECT title_id, price FROM titles WHERE price BETWEEN 10 AND 19.95;
+
+##### 38.	From the titles table, print the title_id columns starting with T1 and having another character, ignoring possible leading and trailing spaces.
+
+######	SELECT title_id, pubdate FROM titles WHERE pubdate BETWEEN '2000-01-01' AND '2000-12-31';
+
+##### 39.	List books whose price is strictly above 10 and strictly below 19,95 less than 19.95
+
+######	SELECT title_id, price FROM titles WHERE (price > 10) AND (price < 19.95);
+
+#### List filtering with IN 
+
+##### 40.	List authors who do not live in any of these states: New York (NY), New Jersey (NJ), or California (CA). (NY), New Jersey (NJ), or California (CA).
+
+######	SELECT au_fname, au_lname, stateFROM authors WHERE state NOT IN ('NY', 'NJ', 'CA');
+
+##### 41.	List the title of the books together with their length for those books whose length is less than 30. The list has to be sorted by the length of the title. 
+
+######	SELECT title_id, advance FROM royalties WHERE advance IN (0.00, 1000.00, 5000.00);
+
+#### Find substrings with POSITION (LOCATE)
+
+##### 42.	 List books that were published on the first day of the year 2000, 2001, or 2002. 
+
+######	SELECT title_id, pubdate FROM titles WHERE pubdate IN ('2000-01-01', '2001-01-01', '2002-01-01');
+
+##### 43.	List 1) the titles that contain the letter u in their first 10 positions and 2) the position of the letter u itself. The resulting table has to be sorted in descending order by the position of the letter u.
+
+######	SELECT pub_id, city, state, country FROM publishers WHERE state = 'CA';
+
+#### Date Arithmetic
+
+##### 44.	 Print books that have been published in the first 6 months of the year 2001 or 2002.  The output has to be sorted in descending order of date. 
+
+######	SELECT pub_id, city, state, country FROM publishers WHERE state <> 'CA';
+
+##### 45.	Listar editores que no viven en California o cuyo estado es null
+
+######	SELECT pub_id, city, state, country FROM publishers WHERE state <> 'CA';
+
+##### 46.	List books whose subject is biography and their publication date is not null
+
+######	SELECT title_id, type, pubdate FROM titles WHERE type = 'biography' AND pubdate IS NOT NULL;
+
+### Operators and Functions
+
+#### Creation of derived columns
+
+##### 47.	Creation of an artificial derived columna
+
+######	SELECT au_id, 2 + 3 FROM authors;
+
+##### 48.	List books with a 10% discount
+
+######	SELECT title_id, price, 0.10 AS "Discount", price * (1 - 0.10) AS "New price" FROM titles;
+
+##### 49.	List book advances with negative value
+
+######	SELECT title_id, advance AS "Advance" FROM royalties;
+
+##### 50.	Listar libros de biografías junto con las ventas que han generado (venta = price*sales) en orden descendiente
+
+######	SELECT title_id,price * sales AS Revenue FROM titles WHERE type = 'biography' ORDER BY Revenue DESC;
+
+##### 51.	List books with the number of pages divided by 10 as integers and as decimals
+
+######	SELECT title_id,pages,pages DIV 10 AS "pages/10",pages/10.0 AS "pages/10.0" FROM titles;
+
+#### Order of evaluation
+
+##### 52.	Example of precedence of arithmetic operators
+
+######	SELECT 2 + 3 * 4 AS "2+3*4", (2 + 3) * 4 AS "(2+3)*4", 6 / 2 * 3 AS "6/2*3", 6 / (2 * 3) AS "6/(2*3)" ;
+
+##### 53.	List authors with first name and surname concatenated in a single column
+
+######	SELECT au_fname || ' ' || au_lname AS "Author name" FROM authors ORDER BY au_lname ASC, au_fname ASC;
+
+##### 54.	List sales of biographies in descending order of sales
+
+######	SELECT SALES || ' copies sold of title ' || title_id AS 'Biography sales' FROM titles WHERE type = 'biography' AND sales IS NOT NULL ORDER BY sales DESC;
+
+##### 55.	List biographies in descending order of publication date
+
+######	SELECT 'Title '|| title_name || ' published on ' || pubdate AS "Biography sales" FROM titles WHERE type = 'biography' AND pubdate IS NOT NULL ORDER BY pubdate DESC;
+
+##### 56.	List authors whose first and last name is Klee Hull
+
+SELECT au_id, au_fname, au_lname FROM authors WHERE au_fname || ' ' || au_lname = 'Klee Hull';
+
+#### Substring extraction with Substring (Substr)
+
+##### 57.	Split the primary key of the editors into alphabetical and numerical parts.
+
+######	SELECT pub_id,SUBSTR(pub_id, 1, 1) AS "Alpha part", SUBSTR(pub_id, 2) AS "Num part" FROM publishers;
+
+##### 58.	List the initial letter of the first and last name of authors whose state is NY or CO.
+
+######	SELECT SUBSTR(au_fname, 1, 1) || '. ' || au_lname AS "Author name", state FROM authorsm WHERE state IN ('NY', 'CO');
+
+##### 59.	List authors whose phone number starts with 415
+
+######	SELECT au_fname, au_lname, phone FROM authors WHERE SUBSTR(phone, 1, 3)='415';
 
 
 
