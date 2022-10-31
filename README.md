@@ -423,7 +423,106 @@ SELECT au_id, au_fname, au_lname FROM authors WHERE au_fname || ' ' || au_lname 
 
 ######	SELECT au_fname, au_lname, phone FROM authors WHERE SUBSTR(phone, 1, 3)='415';
 
+### LOWER and UPPER
+
+##### 60.	For each author, print first name in lower case and surname in upper case.
+
+######	SELECT LOWER(au_fname) AS "Lower", UPPER(au_lname) AS "Upper" FROM authors;
+
+##### 61.	Imprimir nombre de libros que contengan MO independientemente de mayúculas y minúsculas
+
+######	SELECT title_name FROM titles WHERE UPPER(title_name) LIKE '%MO%';
+	
+### Trimming characters with TRIM
+
+##### 62.	Remove spaces from ' AAA ' at the beginning, at the end, at the beginning and at the end.
+
+######	SELECT '<' || ' AAA ' || '>' AS "Untrimmed", '<' || TRIM(LEADING FROM ' AAA ') || '>' AS "Leading", '<' || TRIM(TRAILING FROM ' AAA ') || '>' AS "Trailing", '<' || TRIM('AAA ') || '>' AS "Both" ;
+
+##### 63.	List authors' surnames, removing any capital H at the beginning of the name at the beginning
+
+######	SELECT au_lname, TRIM(LEADING 'H' FROM au_lname) AS "Trimmed name" FROM authors;
+
+##### 64.	From the titles table, print the title_id columns starting with T1 and have another character ignoring possible leading and trailing spaces. End
+
+######	SELECT title_id FROM titles WHERE TRIM(title_id) LIKE 'T1_';
+
+#### String length with CHARACTER_LENGTH (LENGTH)
+	
+##### 65.	Print the name of the authors next to their length
+
+######	SELECT au_fname, LENGTH(au_fname) AS "Len" FROM authors;
+	
+##### 66.	List the title of the books together with their length for those books whose length is less than 30.whose length is less than 30. The list has to be sorted by the length of the title.
+
+######	SELECT title_name,LENGTH(title_name) AS "Len" FROM titles WHERE LENGTH(title_name) < 30 ORDER BY LENGTH(title_name) ASC;
+										       
+#### Finding substrings with POSITION (LOCATE)
+										       
+##### 67.	List the position of the substring e in the author's first name and the position of the substring ma in the author's last name.
+
+######	SELECT au_fname, LOCATE('e', au_fname) AS "Pos e", au_lname, LOCATE('ma', au_lname) AS "Pos ma" FROM authors;
+
+##### 68.	List 1. the titles containing the letter u in their first 10 positions and 2) the position of the letter u itself. The resulting table has to be sorted in descending order by the position of the letter u.
+
+######	SELECT title_name, LOCATE('u', title_name) AS "Pos" FROM titles WHERE LOCATE('u', title_name) BETWEEN 1 AND 10 ORDER BY LOCATE('u', title_name) DESC;
+
+#### Date Arithmetic
+										       
+##### 69.	Print books that have been published in the first 6 months of the years 2001 or 2002. The output has to be sorted in descending order of date.
+
+######	SELECT title_id, pubdate FROM titles WHERE YEAR(pubdate) BETWEEN 2001 AND 2002 AND MONTH(pubdate) BETWEEN 1 AND 6 ORDER BY pubdate DESC;
+
+##### 70.	Obtaining current date and time
+
+######	SELECT CURRENT_DATE AS "Date", CURRENT_TIME AS "Time", CURRENT_TIMESTAMP AS "Timestamp";
+
+#### User information with USERS
+
+##### 71.	Print the username logged in to the database
+
+######	SELECT CURRENT_USER AS "User";
+	
+#### Type conversion with CAST
+										       
+##### 72.	Convert price of books to INTEGER and CHAR(8)
+
+######	SELECT price AS "price(DECIMAL)", CAST(price AS INTEGER) AS "price(INTEGER)", '<' || CAST(price AS CHAR(8)) || '>' AS "price(CHAR(8))" FROM titles;
+										       
+##### 73.	In the titles table, convert the column sales to CHAR(8) and the column title_-.name column to CHAR(20) for use in a concatenation with characters.
 
 
+#### Evaluation of conditional values with CASE
+										       
+##### 74.	Increase the price of books: history books by 10%, psychology books by 20%, and leave the rest unchanged.
+								       
+######	SELECT title_id, type, price, CASE WHEN type = 'history' THEN price * 1.10 WHEN type = 'psychology' THEN price * 1.20 ELSE price END AS "New price" FROM titles WHERE price is NOT NULL ORDER BY type ASC, title_id ASC;
+
+##### 75.	List the books with a sales category of type characters depending on the value of the sales column.
+
+######	SELECT title_id, CASE WHEN sales IS NULL THEN 'Unknown' WHEN sales <= 1000 THEN 'Not more than 1,000' WHEN sales <= 10000 THEN 'Between 1,001 and 10,000' WHEN sales <= 100000 THEN 'Between 10,001 and 100,000' WHEN sales <= 1000000 THEN 'Between 100,001 and 1,000,000' ELSE 'Over 1,000,000' END AS "Sales category" FROM titles ORDER BY sales ASC;
+
+#### Null testing with COALESCE
+
+##### 76.	Lists the state column of the editors. If the value is null print N/A
+
+######	SELECT pub_id, city, COALESCE(state, 'N/A') AS "state", country FROM publishers;
+
+#### Checking nulls with NULLIF
+
+##### 77.	In this query if the value of the contract column of the titles table is 0 it is set to NULL
+
+######	SELECT title_id, contract, NULLIF(contract, 0) AS "Null contract" FROM titles;
+
+
+### Summary and Aggregation of Data
+
+#### Find minima with MIN
+
+
+
+
+	
+	
 
 <h5> </h5>
