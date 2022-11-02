@@ -1,0 +1,1 @@
+mariadb -t -ubooks -pbooks books < $1 
