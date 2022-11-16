@@ -519,6 +519,46 @@ SELECT au_id, au_fname, au_lname FROM authors WHERE au_fname || ' ' || au_lname 
 
 #### Find minima with MIN
 
+##### 78.	Print the lowest price of books
+
+######	SELECT MIN(price) AS "Min price" from titles;
+
+##### 79.	Print the earliest date of publication of a book
+
+######	SELECT MIN(pubdate) AS "Earliest pubdate" from titles;
+
+##### 80.	From history books print the number of pages of the one with the lowest number
+
+######	SELECT MIN(pages) AS "Min history pages" FROM titles WHERE type = 'history';
+
+#### Find maximums with MAX
+
+##### 81.	Print the lowest book price, the highest, and the difference range
+
+SELECT MIN(price) AS "Min price", MAX(price) AS "Max price",MAX(price) - MIN(price) AS "Range" FROM titles;
+
+######	82.	History books print the maximum price value multiplied by salts
+
+######	SELECT title_name, MAX(price * sales) AS "Max history revenue" FROM titles WHERE type = 'history';
+
+#### Calculation of sums with SUM
+
+##### 83.	Print the sum of all advances paid to authors
+
+######	SELECT SUM(advance) AS "Total advances" FROM royalties;
+
+##### 84.	Print sales of all books published in 2000
+
+######	SELECT SUM(sales) AS "Total sales (2000 books)" FROM titles WHERE year(pubdate) = 2000;
+
+##### 85.	Print the sum of 1) prices, 2) sales, and 3) multiplying prices by sales for all books
+
+######	SELECT SUM(price) AS "Total price", SUM(sales) AS "Total sales", SUM(price * sales) AS "Total revenue"  FROM titles;
+
+
+
+
+
 
 
 
