@@ -555,14 +555,89 @@ SELECT MIN(price) AS "Min price", MAX(price) AS "Max price",MAX(price) - MIN(pri
 
 ######	SELECT SUM(price) AS "Total price", SUM(sales) AS "Total sales", SUM(price * sales) AS "Total revenue"  FROM titles;
 
+#### Cálculo de medias con AVG
 
+##### 86.	Print the average of the book prices multiplied by 2.
 
+######	SELECT AVG(price * 2) AS "AVG(price * 2)" FROM titles;
 
+##### 87.	Print average and sum of history book sales
 
+######	SELECT AVG(sales) AS "AVG(sales)",SUM(sales) AS "SUM(sales)" FROM titles WHERE type = 'history';
 
+##### 88.	Print the books and their sales for all books whose sales are above average sales exceed the average.
 
+######	SELECT title_id, sales FROM titles WHERE sales > (SELECT AVG(sales) FROM titles) ORDER BY sales DESC;
 
+##### 89.	Print the average sales of the biographies considering the nulls as 0.
+
+######	SELECT AVG(COALESCE(sales, 0)) AS AvgSales FROM titles WHERE type = 'biography';
+
+#### Calculation of number of rows with COUNT
+
+##### 90.	Print the count of book titles, their price, and quantity
 	
-	
+######	SELECT COUNT(title_id) AS "COUNT(title_id)", COUNT(price) AS "COUNT(price)", COUNT(*) AS "COUNT(*)" FROM titles;
+
+##### 91.	Print the count of the book titles, their price, and the quantity excluding books whose price is null 
+
+######	SELECT COUNT(title_id) AS "COUNT(title_id)", COUNT(price) AS "COUNT(price)", COUNT(*) AS "COUNT(*)" FROM titles WHERE price IS NOT NULL;
+
+##### 92.	Print the count of the book titles, their price, and the quantity for those books whose price is null
+
+######	SELECT COUNT(title_id) AS "COUNT(title_id)", COUNT(price) AS "COUNT(price)", COUNT(*) AS "COUNT(*)" FROM titles WHERE price IS NULL;
+
+#### Sum of distinct values with DISTINCT
+
+##### 93.	Print the total number of books in the table titles.
+
+######	SELECT COUNT(*) AS "COUNT(*)" FROM titles;
+
+##### 94.	Consider the books that do not have NULL as a price and print 1) the number of them, 2) the sum of their prices, and 3) the average of their prices.
+
+######	SELECT COUNT(price) AS "COUNT(price)",SUM(price) AS "SUM(price)", AVG(price) AS "AVG(price)" FROM titles;
+
+##### 95.	Consider the books that do not have NULL as a price and print 1) the number of them, 2) the sum of their prices, and 3) the average of their prices.
+
+######	SELECT COUNT(DISTINCT price) AS "COUNT(DISTINCT)", SUM(DISTINCT price) AS "SUM(DISTINCT)", AVG(DISTINCT price) AS "AVG(DISTINCT)" FROM titles;
+
+##### 96.	For each author, print the number of books he/she wrote, including those in which he/she is a co-author.
+
+######	SELECT au_id,COUNT(*) AS "num_books" FROM title_authors GROUP BY au_id;
+
+##### 97.	Illustrates the difference between COUNT(state) and COUNT(*).
+
+######	SELECT state, COUNT(state) AS "COUNT(state)", COUNT(*) AS "COUNT(*)" FROM publishers GROUP BY state;
+
+##### 98.	In order to have consistent mathematical results, it is necessary to use COUNT(sales) instead of COUNT(*).
+
+######	SELECT type, SUM(sales)/COUNT(sales) AS "SUM/COUNT(sales)", SUM(sales)/COUNT(*) AS "SUM/COUNT(*)", AVG(sales) AS "AVG(sales)" FROM titles GROUP BY type;
+
+##### 99.	For each type of book, calculate statistics on total sales, average, and number of books.
+
+######	SELECT type, SUM(sales) AS "SUM(sales)", AVG(sales) AS "AVG(sales)", COUNT(sales) AS "COUNT(sales)" FROM titles GROUP BY type;
+
+##### 100.	For each type of book, calculate the following statistics: (1) total sales, 2) average sales, and 3) number of books. The result has to be sorted by total sales. In addition, only books with a price equal to or higher than only those books whose price is equal to or greater than 13. (Use WHERE and ORDER BY).
+
+######	SELECT type, SUM(sales) AS "SUM(sales)", AVG(sales) AS "AVG(sales)", COUNT(sales) AS "COUNT(sales)" FROM titles WHERE price >= 13 GROUP BY type ORDER BY SUM(sales) DESC;
+
+##### 101.	For each publisher and type of book it lists the number of books sorted in ascending order by publisher and in descending order by number of books.
+
+######	SELECT pub_id, type, COUNT(title_id) AS count FROM titles GROUP BY pub_id, type ORDER BY pub_id ASC, count DESC;
+
+##### 102.	Print the different types of books.
+
+######	SELECT DISTINCT type FROM titles;
+
+##### 103.	Lists the average sales for each of the prices sorted by ascending price ascending.
+
+######	SELECT price, AVG(sales) FROM titles WHERE price IS NOT NULL GROUP BY price ORDER BY price ASC;
+
+
+
+
+
+
+
 
 <h5> </h5>
