@@ -491,7 +491,6 @@ SELECT au_id, au_fname, au_lname FROM authors WHERE au_fname || ' ' || au_lname 
 										       
 ##### 73.	In the titles table, convert the column sales to CHAR(8) and the column title_-.name column to CHAR(20) for use in a concatenation with characters.
 
-
 #### Evaluation of conditional values with CASE
 										       
 ##### 74.	Increase the price of books: history books by 10%, psychology books by 20%, and leave the rest unchanged.
@@ -513,7 +512,6 @@ SELECT au_id, au_fname, au_lname FROM authors WHERE au_fname || ' ' || au_lname 
 ##### 77.	In this query if the value of the contract column of the titles table is 0 it is set to NULL
 
 ######	SELECT title_id, contract, NULLIF(contract, 0) AS "Null contract" FROM titles;
-
 
 ### Summary and Aggregation of Data
 
@@ -632,6 +630,121 @@ SELECT MIN(price) AS "Min price", MAX(price) AS "Max price",MAX(price) - MIN(pri
 ##### 103.	Lists the average sales for each of the prices sorted by ascending price ascending.
 
 ######	SELECT price, AVG(sales) FROM titles WHERE price IS NOT NULL GROUP BY price ORDER BY price ASC;
+
+#### Group filtering with HAVING
+
+##### 104.	List the number of books written per author as long as he/she has written more than 3 books.
+
+######	SELECT au_id,COUNT(*) AS "num_books" FROM title_authors GROUP BY au_id HAVING COUNT(*) >= 3;
+
+##### 105.	For each type of book, it prints the number of books and the average profit (price*sales), but only for those types with an average sale of more than 1,000,000.
+
+######	SELECT type, COUNT(price) AS "COUNT(price)", AVG(price * sales) AS "AVG revenue" FROM titles GROUP BY type HAVING AVG(price * sales) > 1000000;
+
+##### 106.	For each publisher, list the number of books of each type, for publishers with more than one book per type.
+
+######	SELECT pub_id, type, COUNT(*) AS count FROM titles
+GROUP BY pub_id, type HAVING COUNT(*) > 1 ORDER BY pub_id ASC, count DESC;
+
+##### 107.	For books from publishers P03 and P04, list total sales and average price by type, for types with more than 10,000 total sales and less than 20 average.
+
+######	SELECT type, SUM(sales) AS "SUM(sales)", AVG(price) AS "AVG(price)" FROM titles WHERE pub_id IN ('P03', 'P04') GROUP BY type HAVING SUM(sales) > 10000 AND AVG(price) < 20;
+
+### Joins
+
+#### Qualification of column names
+
+##### 108.	Selecting authors who live in a city where a publisher also lives
+publisher.
+
+######	SELECT au_id, authors.city FROM authors INNER JOIN publishers ON authors.city = publishers.city;
+
+### Creation of table aliases using AS
+
+##### 109.	Select first and last names of authors who live in a city where at least one publisher also lives.
+
+######	SELECT au_fname, au_lname, a.city FROM authors AS a INNER JOIN publishers p ON a.city = p.city;
+
+#### joins with JOIN or WHERE
+
+##### 110.	Select first name (au_fname), last name (au_lname), and city (au_lname) for authors who live in a city in which at least one publisher also lives.
+
+###### SELECT au_fname, au_lname, a.city FROM authors a INNER JOIN publishers p ON a.city = p.city;
+
+#### CROSS JOIN
+
+##### 111.	Displays the selected columns of all possible combinations of rows of the authors and publishers tables.
+
+###### SELECT au_id, pub_id, a.state AS "au_state", p.state AS "pub_state" FROM authors a CROSS JOIN publishers p ORDER BY au_id, pub_id;
+
+#### NATURAL JOIN
+
+##### 112.	For each book (titles table) prints the name (pub_name) of its publisher.
+
+###### SELECT title_id, pub_id, pub_name FROM publishers NATURAL JOIN titles;
+
+###### 113.	For each book, list the name of the publisher (pub_name) and the advance (advance) as long as the advance is less than 20,000. Tables publishers, titles, and royalties.
+
+###### SELECT title_id, pub_id, pub_name, advance FROM publishers NATURAL JOIN titles NATURAL JOIN royalties WHERE advance < 20000;
+
+#### INNER JOIN
+
+#### 114.	Join two tables (authors and title_authors) using the au_id column to list the title_id of the books each author wrote.
+
+###### SELECT a.au_id, a.au_fname, a.au_lname, ta.title_id FROM authors a INNER JOIN title_authors ta ON a.au_id = ta.au_id ORDER BY a.au_id ASC, ta.title_id ASC;
+
+#### 115.	Join three tables (authors, title_authors, and titles) using the column au_id and title_id to list the title_name of the books each author wrote.
+
+###### SELECT a.au_id, a.au_fname, a.au_lname, t.title_name FROM authors a INNER JOIN title_authors ta ON a.au_id = ta.au_id INNER JOIN titles t ORDER BY a.au_id ASC, ta.title_id ASC;
+
+#### 116.	Join two tables (titles and publishers) by means of the pub_id column to list 1) the title_id of the book, 2) the title_name of the book, 3) the pub_id of the publisher, and 4) the publisher's pub_name.
+
+###### SELECT t.title_id, t.title_name, t.pub_id, p.pub_name FROM titles t INNER JOIN publishers p ON p.pub_id = t.pub_id ORDER BY t.title_name ASC;
+
+#### 117.	Lists authors who live in the same city (city) and state (state) as a publisher.
+
+###### SELECT a.au_id, a.au_fname, a.au_lname, a.city, a.state FROM authors a INNER JOIN publishers p ON a.city = p.city AND a.state = p.state ORDER BY a.au_id ASC;
+
+#### 118.	Combines an inner join with WHERE conditions to list books published in the state of California (CA) or outside the North American countries (USA, Canada, Mexico).
+
+###### SELECT t.title_id, t.title_name, p.state, p.country FROM titles t INNER JOIN publishers p ON t.pub_id = p.pub_id WHERE p.state = 'CA' OR p.country NOT IN ('USA', 'Canada', 'Mexico') ORDER BY t.title_id ASC;
+
+#### 119.	Combines an inner join with the COUNT aggregate function and a GROUP BY clause to list the number of books an author wrote (or co-wrote).
+
+###### SELECT a.au_id, COUNT(ta.title_id) AS "Num books" FROM authors a INNER JOIN title_authors ta ON a.au_id = ta.au_id GROUP BY a.au_id ORDER BY a.au_id ASC;
+
+#### 120.	Use WHERE conditions to list the advance paid for each biography. Royalty and title tables.
+
+###### SELECT t.title_id, t.title_name, r.advance FROM royalties r INNER JOIN titles t ON r.title_id = t.title_id WHERE t.type = 'biography' AND r.advance IS NOT NULL ORDER BY r.advance DESC;
+
+#### 121.	Use aggregate functions and the GROUP BY clause to list the amount and the advance paid for each type of book the advance paid for each type of book. Royalty and title tables.
+
+###### SELECT t.type, COUNT(r.advance) AS "COUNT", SUM(r.advance) AS "advance" FROM royalties r INNER JOIN titles t ON r.title_id = t.title_id WHERE r.advance IS NOT NULL GROUP BY t.type ORDER BY t.type ASC;
+
+#### 122.	Use aggregate functions and the GROUP BY clause to list the amount and advance paid for each book type and publisher.Tables royalties and titles.
+
+###### SELECT t.type, t.pub_id, COUNT(r.advance) AS "COUNT", SUM(r.advance) AS "advance" FROM royalties r INNER JOIN titles t ON r.title_id = t.title_id WHERE r.advance IS NOT NULL GROUP BY t.type, t.pub_id ORDER BY t.type ASC, t.pub_id ASC;
+
+#### 123.	List title_id and number of co-authors of all books written by 2 or more authors by 2 or more authors.
+
+###### SELECT ta.title_id, COUNT(ta.au_id) AS "authors" FROM authors a INNER JOIN title_authors ta ON a.au_id = ta.au_id GROUP BY ta.title_id HAVING COUNT(ta.au_id) > 1 ORDER BY ta.title_id ASC;
+
+#### 124.	List all books whose income (price * sales) exceeds at least 10 times the advance received.
+
+###### SELECT t.title_id, t.title_name, r.advance, t.price * t.sales AS "Revenue" FROM titles t INNER JOIN royalties r ON t.price * t.sales > r.advance * 10 AND t.title_id = r.title_id ORDER BY t.price * t.sales DESC;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
