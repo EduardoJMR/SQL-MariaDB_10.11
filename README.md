@@ -771,12 +771,87 @@ publisher.
 
 ###### SELECT ta.au_id, t.title_id, t.title_name, t.sales FROM title_authors ta INNER JOIN titles t ON t.title_id = ta.title_id WHERE sales > 100000;
 
+#### 133.	List the name of each employee along with the name of his or her manager.
 
+###### SELECT e1.emp_name AS "Employee name", e2.emp_name AS "Boss name" FROM employee e1 INNER JOIN employee e2 ON e1.boss_id = e2.emp_id;
 
+#### 134.	Select authors who live in the same state as the author A04
 
+###### SELECT a1.au_id, a1.au_fname, a1.au_lname, a1.state FROM authors a1 INNER JOIN authors a2 ON a1.state = a2.state WHERE a2.au_id = 'A04';
 
+#### 135.	For each biography, it lists its id (title_id), its sales, and the other biographies that sold more than it. biographies that sold more than it.
 
+###### SELECT t1.title_id, t1.sales, t2.title_id AS "Better seller", t2.sales AS "Higher sales" FROM titles t1 INNER JOIN titles t2 ON t1.sales < t2.sales WHERE t1.type = 'biography' AND t2.type = 'biography' ORDER BY t1.title_id ASC, t2.sales ASC;
 
+#### 136.	List the different pairs of authors who live in New York City.
+
+###### SELECT a1.au_fname, a1.au_lname, a2.au_fname, a2.au_lname FROM authors a1INNER JOIN authors a2 ON a1.state = a2.state WHERE a1.state = 'NY' ORDER BY a1.au_id ASC, a2.au_id ASC;
+
+#### 137.	Lists the different pairs of authors living in New York without redundancy.
+
+###### SELECT a1.au_fname, a1.au_lname, a2.au_fname, a2.au_lname FROM authors a1 INNER JOIN authors a2 ON a1.state = a2.state AND a1.au_id <> a2.au_id WHERE a1.state = 'NY' ORDER BY a1.au_id ASC, a2.au_id ASC;
+
+#### 138.	Lists the different pairs of authors living in New York without redundancies and without duplicate pairs.
+
+###### SELECT a1.au_fname, a1.au_lname, a2.au_fname, a2.au_lname FROM authors a1 INNER JOIN authors a2 ON a1.state = a2.state AND a1.au_id < a2.au_id WHERE a1.state = 'NY' ORDER BY a1.au_id ASC, a2.au_id ASC;
+
+#### 139.	List the names of publishers that publish biographies (manual).
+
+###### SELECT DISTINCT pub_id FROM titles WHERE type = 'biography';
+
+#### 140.	List the names of publishers who publish biographies (inner join).
+
+###### SELECT DISTINCT pub_name FROM publishers p INNER JOIN titles t ON p.pub_id = t.pub_id WHERE t.type = 'biography';
+
+#### 141.	List the names of publishers who publish biographies (Sub-query).
+
+###### SELECT pub_name FROM publishers WHERE pub_id IN (SELECT pub_id FROM titles WHERE type = 'biography');
+
+#### 142.	Selecting authors who live in the same city as a publisher.
+
+###### SELECT au_id, city FROM authors WHERE city IN (SELECT DISTINCT city FROM publishers);
+
+#### 143.	List authors who have not written any books.
+
+###### SELECT au_id, au_fname, au_lname FROM authors WHERE au_id NOT IN (SELECT au_id FROM title_authors);
+
+#### Simple sub-queries
+
+#### 144.	List authors who live in the same state as the author with au_id = A04
+
+###### SELECT au_id, au_fname, au_lname, state FROM authors WHERE state IN (SELECT state FROM authors WHERE au_id = 'A04');
+
+#### Correlated sub-queries
+
+#### 145.	Lists books whose sales are equal to or exceed the average sales in their category.
+
+###### SELECT t.title_id, t.type, t.sales FROM titles AS t WHERE sales >= (SELECT AVG(sales) FROM titles AS av WHERE av.type = t.type);
+
+#### UPDATE
+
+151.	Changes the contract value to 0 for all rows in the titles table.
+
+UPDATE titles SET contract = 0 ;
+
+152.	Double the price of history books
+
+UPDATE titles SET price = price * 2.0 WHERE type = 'history';
+
+153.	Update the type and pages columns for psychology books.
+
+UPDATE titles SET type = 'self help', pages = NULL WHERE type = 'psychology';
+
+154.	Halve the sales of all books whose sales are above average.
+
+UPDATE titles SET sales = sales * 0.5 WHERE sales > ( SELECT upper FROM ( SELECT AVG(sales) as upper FROM titles) as avgg );
+
+155.	Change the publication date of all books by Sarah Buchman.
+
+UPDATE titles SET pubdate = '2003-01-01' WHERE title_id IN (SELECT title_id FROM title_authors WHERE au_id IN (SELECT au_id FROM authors WHERE au_fname = 'Sarah' AND au_lname = 'Buchman'));
+
+156.	Change the publisher of all Tenterhooks Press books to Abatis Publishers.
+
+UPDATE titles SET pub_id = (SELECT pub_id FROM publishers WHERE pub_name = 'Abatis Publishers') WHERE pub_id = (SELECT pub_id FROM publishers WHERE pub_name = 'Tenterhooks Press');
 
 
 
