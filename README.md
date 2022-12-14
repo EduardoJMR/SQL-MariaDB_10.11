@@ -733,9 +733,43 @@ publisher.
 
 ###### SELECT t.title_id, t.title_name, r.advance, t.price * t.sales AS "Revenue" FROM titles t INNER JOIN royalties r ON t.price * t.sales > r.advance * 10 AND t.title_id = r.title_id ORDER BY t.price * t.sales DESC;
 
+#### OUTER JOIN
 
+#### 125.	List authors living in cities where there is a publisher
 
+###### SELECT a.au_fname, a.au_lname, p.pub_name FROM authors a INNER JOIN publishers p ON a.city = p.city ORDER BY p.pub_name ASC, a.au_lname ASC, a.au_fname ASC;
 
+#### 126.	Left outer join to include all authors in the result regardless of whether there is an editor living in the same city. whether or not there is an editor living in the same city.
+
+###### SELECT a.au_fname, a.au_lname, p.pub_name FROM authors a LEFT OUTER JOIN publishers p ON a.city = p.city ORDER BY p.pub_name ASC, a.au_lname ASC, a.au_fname ASC;
+
+###### SELECT a.au_fname, a.au_lname, p.pub_name FROM authors a RIGHT OUTER JOIN publishers p  ON a.city = p.city ORDER BY p.pub_name ASC, a.au_lname ASC, a.au_fname ASC;
+
+#### 127.	Right outer join to include all publishers in the result regardless of whether there is an author living in the same city.
+
+###### SELECT a.au_fname, a.au_lname, p.pub_name FROM authors a RIGHT OUTER JOIN publishers p  ON a.city = p.city ORDER BY p.pub_name ASC, a.au_lname ASC, a.au_fname ASC;
+
+#### 128.	Full outer join to include all authors and publishers in the result regardless of whether an author lives in the same city as a publisher.
+
+###### FULL OUTER JOIN is not implemented in MariaDB.
+
+#### 129.	Equivalent to full outer join
+
+###### SELECT a.au_fname, a.au_lname, p.pub_name FROM authors a LEFT OUTER JOIN publishers p ON a.city = p.city UNION DISTINCT SELECT a.au_fname, a.au_lname, p.pub_name FROM authors a RIGHT OUTER JOIN publishers p ON a.city = p.city ORDER BY pub_name ASC, au_lname ASC, au_fname ASC;
+
+#### 130.	Lists the number of books written by each author including authors who have not written any books
+
+###### SELECT a.au_id, COUNT(ta.title_id) AS "Num books" FROM authors a LEFT OUTER JOIN title_authors ta ON a.au_id = ta.au_id GROUP BY a.au_id ORDER BY a.au_id ASC;
+
+#### 131.	List of authors who have not written any books
+
+###### SELECT a.au_id, a.au_fname, a.au_lname FROM authors a LEFT OUTER JOIN title_authors ta ON a.au_id = ta.au_id WHERE ta.au_id IS NULL;
+
+#### 132.	It combines an inner join and a left outer join to list all authors and any possible books they have written along with their sales. But it shows sales only for those books that sold more than 100,000 copies.
+
+###### SELECT a.au_id aid, a.au_fname fname, a.au_lname lname, COALESCE(tta.title_id, 'N/A') t_id, COALESCE(tta.title_name, 'N/A') name, COALESCE(tta.sales, 'N/A') sales FROM authors a LEFT OUTER JOIN (SELECT ta.au_id, t.title_id, t.title_name, t.sales FROM title_authors ta INNER JOIN titles t ON t.title_id = ta.title_id WHERE sales > 100000) tta ON a.au_id = tta.au_id ORDER BY a.au_id ASC, tta.title_id ASC;
+
+###### SELECT ta.au_id, t.title_id, t.title_name, t.sales FROM title_authors ta INNER JOIN titles t ON t.title_id = ta.title_id WHERE sales > 100000;
 
 
 
