@@ -5,6 +5,8 @@
 
 ### Datasets
 
+#### Table authors
+
 <h6> CREATE TABLE authors (
  au_id CHAR(3) NOT NULL,
  au_fname VARCHAR(15) NOT NULL,
@@ -22,6 +24,8 @@
 <h6>INSERT INTO authors(au_id,au_fname,au_lname,phone,address,city,state,zip)
  values ('A07','Paddy',"O'Furniture",'941-925-0752','1442 Main St','Sarasota','FL','34236'); </h6>
 
+#### Table publishers
+
 <h6>CREATE TABLE publishers (
  pub_id CHAR(3) NOT NULL,
  pub_name VARCHAR(20) NOT NULL,
@@ -32,6 +36,8 @@
 
 <h6>INSERT INTO publishers (pub_id,pub_name,city,state,country)
 values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h6>
+
+#### Table titles
 
 <h6>CREATE TABLE titles(
  title_id CHAR(3) NOT NULL,
@@ -57,6 +63,8 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h6>
 <h6> INSERT INTO titles (title_id,title_name,type,pub_id,pages,price,sales,pubdate,contract)
  values ('T13',"What Are The Civilian Applications?",'history','P03','802','29.99','10467','1999-05-31','1');</h6>
  
+ #### Table title_authors
+ 
  <h6>CREATE TABLE title_authors (
  title_id CHAR(3) NOT NULL,
  au_id CHAR(3) NOT NULL,
@@ -74,6 +82,8 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h6>
 <h6>INSERT INTO title_authors (title_id,au_id,au_order,royalty_share)
  values ('T13','A01',1,1.00);</h6>
  
+ #### Table royalties
+ 
  <h6>CREATE TABLE royalties (
  title_id CHAR(3) NOT NULL,
  advance DECIMAL(9,2),
@@ -85,6 +95,8 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h6>
  
  <h6>INSERT INTO royalties (title_id,advance,royalty_rate)
  values ('T13',20000.00,0.06);</h6>
+ 
+ #### Table test_scores
  
  <h6>CREATE TABLE test_scores (
  name varchar(20), test varchar(20), score tinyint );</h6>
@@ -98,6 +110,8 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h6>
  ("Robert", "Tuning", 31),
  ("Tracy", "Tuning", 88),
  ("Tatiana", "Tuning", 83);</h6>
+ 
+ #### Table emp
  
  <h6>CREATE TABLE IF NOT EXISTS emp (
  empno DECIMAL(4), ename VARCHAR(10), job VARCHAR(9),
@@ -120,6 +134,8 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h6>
  (7900, 'JAMES', 'CLERK', 7698, '1981-12-03', 950, NULL, 30),
  (7902, 'FORD', 'ANALYST', 7566, '1981-12-03', 3000, NULL, 20),
  (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, NULL, 10) ;</h6>
+  
+ #### Table new_publishers
  
  <h6>CREATE TABLE new_publishers (
  pub_id CHAR(3) NOT NULL,
@@ -134,6 +150,8 @@ values ('P04','Tenterhooks Press','Berkeley','CA','USA');</h6>
  ('P12','Wiley and Sons','Pittsburgh','PA','USA'),
  INSERT INTO new_publishers (pub_id,pub_name,city,country)
  VALUES ('P13','Verlang','Berlin','Germany'), ('P14','Springer','Berlin','Germany');</h6>
+
+#### Table employee
 
 <h6>CREATE TABLE employee (
  emp_id CHAR(3) NOT NULL,
@@ -827,31 +845,96 @@ publisher.
 
 ###### SELECT t.title_id, t.type, t.sales FROM titles AS t WHERE sales >= (SELECT AVG(sales) FROM titles AS av WHERE av.type = t.type);
 
+#### 146-150 Inserting, Updating, and Deleting of Rows
+
 #### UPDATE
 
-151.	Changes the contract value to 0 for all rows in the titles table.
+#### 151.	Changes the contract value to 0 for all rows in the titles table.
 
-UPDATE titles SET contract = 0 ;
+###### UPDATE titles SET contract = 0 ;
 
-152.	Double the price of history books
+#### 152.	Double the price of history books
 
-UPDATE titles SET price = price * 2.0 WHERE type = 'history';
+###### UPDATE titles SET price = price * 2.0 WHERE type = 'history';
 
-153.	Update the type and pages columns for psychology books.
+#### 153.	Update the type and pages columns for psychology books.
 
-UPDATE titles SET type = 'self help', pages = NULL WHERE type = 'psychology';
+###### UPDATE titles SET type = 'self help', pages = NULL WHERE type = 'psychology';
 
-154.	Halve the sales of all books whose sales are above average.
+#### 154.	Halve the sales of all books whose sales are above average.
 
-UPDATE titles SET sales = sales * 0.5 WHERE sales > ( SELECT upper FROM ( SELECT AVG(sales) as upper FROM titles) as avgg );
+###### UPDATE titles SET sales = sales * 0.5 WHERE sales > ( SELECT upper FROM ( SELECT AVG(sales) as upper FROM titles) as avgg );
 
-155.	Change the publication date of all books by Sarah Buchman.
+#### 155.	Change the publication date of all books by Sarah Buchman.
 
-UPDATE titles SET pubdate = '2003-01-01' WHERE title_id IN (SELECT title_id FROM title_authors WHERE au_id IN (SELECT au_id FROM authors WHERE au_fname = 'Sarah' AND au_lname = 'Buchman'));
+###### UPDATE titles SET pubdate = '2003-01-01' WHERE title_id IN (SELECT title_id FROM title_authors WHERE au_id IN (SELECT au_id FROM authors WHERE au_fname = 'Sarah' AND au_lname = 'Buchman'));
 
-156.	Change the publisher of all Tenterhooks Press books to Abatis Publishers.
+#### 156.	Change the publisher of all Tenterhooks Press books to Abatis Publishers.
 
-UPDATE titles SET pub_id = (SELECT pub_id FROM publishers WHERE pub_name = 'Abatis Publishers') WHERE pub_id = (SELECT pub_id FROM publishers WHERE pub_name = 'Tenterhooks Press');
+###### UPDATE titles SET pub_id = (SELECT pub_id FROM publishers WHERE pub_name = 'Abatis Publishers') WHERE pub_id = (SELECT pub_id FROM publishers WHERE pub_name = 'Tenterhooks Press');
+
+#### 157-159 Delete
+
+#### 160-178 Creating, Altering, and Deleting Tables 
+
+#### 179-182 Indexes
+
+### Vistas
+
+#### 183.	Create views with only some columns of the table authors.
+
+###### CREATE VIEW au_names AS SELECT au_id, au_fname, au_lname FROM authors;
+
+#### 184.	Create a view with authors living in a city where there is at least one publisher. at least one publisher.
+
+###### CREATE VIEW cities (au_id, au_city, pub_id, pub_city) AS SELECT a.au_id, a.city, p.pub_id, p.city FROM authors a INNER JOIN publishers p ON a.city = p.city;
+
+### Analytical functions
+
+#### 185.	Example table
+
+###### CREATE TABLE test_scores (
+ name varchar(20), test varchar(20), score tinyint );
+
+###### INSERT INTO test_scores VALUES ("Steve", "SQL", 75), ("Robert", "SQL", 43), ("Tracy", "SQL", 56), ("Tatiana", "SQL", 87), ("Steve", "Tuning", 83), ("Robert", "Tuning", 31), ("Tracy", "Tuning", 88), ("Tatiana", "Tuning", 83);
+
+#### 186.	Average per test
+
+###### SELECT name, test, score, AVG(score) OVER (PARTITION BY test) AS avgtest FROM test_scores;
+
+#### 187.	Average by name.
+
+SELECT name, test, score, AVG(score) OVER (PARTITION BY name) AS avgname FROM test_scores;
+
+#### 188.	Average by test and name
+
+###### SELECT name, test, score, AVG(score) OVER (PARTITION BY test) AS avgtest, AVG(score) OVER (PARTITION BY name) AS avgname FROM test_scores;
+
+#### 189.	Order by score (row_number).
+
+###### SELECT row_number() OVER (order BY score DESC) AS pos, name, test, score FROM test_scores;
+
+#### 190.	Order by rank
+
+###### SELECT rank() OVER (order BY score DESC) AS pos, name, test, score FROM test_scores;
+
+#### 191.	Order by score (dense_rank).
+
+###### SELECT dense_rank() OVER (order BY score DESC) AS pos, name, test, score FROM test_scores;
+
+#### 192.	Order by test and score (row_number).
+
+###### SELECT row_number() OVER (partition by test order BY score DESC) AS pos, name, test, score FROM test_scores;
+
+
+
+
+
+
+
+
+
+
 
 
 
