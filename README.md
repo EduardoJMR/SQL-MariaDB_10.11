@@ -926,23 +926,64 @@ SELECT name, test, score, AVG(score) OVER (PARTITION BY name) AS avgname FROM te
 
 ###### SELECT row_number() OVER (partition by test order BY score DESC) AS pos, name, test, score FROM test_scores;
 
+#### 193.	Order by test and rank.
 
+###### SELECT rank() OVER (partition by test order BY score DESC) AS pos, name, test, score FROM test_scores;
 
+#### 194.	Order by test and score (dense_rank).
 
+###### SELECT dense_rank() OVER (partition by test order BY score DESC) AS pos, name, test, score FROM test_scores;
 
+#### 195.	Compare score with the next (lead).
 
+###### SELECT name, test, score, lead(score) OVER (partition by test order BY score DESC) AS next FROM test_scores;
 
+#### 196.	Compare score with previous (lag).
 
+###### SELECT name, test, lag(score) OVER (partition by test order BY score DESC) AS prev, score FROM test_scores;
 
+#### 197.	Compare score with previous score (lag) and next score (lead).
 
+###### SELECT name, test, lag(score) OVER (partition by test order BY score DESC) AS prev, score, lead(score) OVER (partition by test order BY score DESC) AS next FROM test_scores;
 
+#### 198.	Table example.
 
+###### CREATE TABLE IF NOT EXISTS emp ( empno DECIMAL(4), ename VARCHAR(10), job VARCHAR(9), mgr DECIMAL(4), hiredate CHAR(10), sal DECIMAL(7,2), comm DECIMAL(7,2), deptno DECIMAL(2), CONSTRAINT pk_emp PRIMARY KEY (empno));
 
+###### ###### INSERT INTO emp VALUES (7369, 'SMITH', 'CLERK', 7902, '1980-12-17', 800, NULL, 20), (7499, 'ALLEN', 'SALESMAN', 7698, '1981-02-20', 1600, 300, 30), (7521, 'WARD', 'SALESMAN', 7698, '1981-02-22', 1250, 500, 30), (7566, 'JONES', 'MANAGER', 7839, '1981-04-02', 2975, NULL, 20), (7654, 'MARTIN', 'SALESMAN', 7698, '1981-09-28', 1250, 1400,30), (7698, 'BLAKE', 'MANAGER', 7839, '1981-05-01', 2850, NULL, 30), (7782, 'CLARK', 'MANAGER', 7839, '1981-06-09', 2450, NULL, 10), (7788, 'SCOTT', 'ANALYST', 7566, '1987-07-13', 3000, NULL, 20), (7839, 'KING', 'PRESIDENT', NULL, '1981-11-17', 5000, NULL, 10), (7844, 'TURNER', 'SALESMAN', 7698, '1981-09-08', 1500, 0, 30), (7876, 'ADAMS', 'CLERK', 7788, '1987-07-13', 1100, NULL, 20), (7900, 'JAMES', 'CLERK', 7698, '1981-12-03', 950, NULL, 30), (7902, 'FORD', 'ANALYST', 7566, '1981-12-03', 3000, NULL, 20), (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, NULL, 10) ;
 
+#### 199.	Salary of an employee together with the average salary of his or her department.
 
+###### SELECT empno, ename, deptno, sal, AVG(sal) OVER (PARTITION BY deptno) AS avg_dept_sal FROM emp;
 
+#### 200.	Salary of an employee together with the average salary of all employees.
 
+###### SELECT empno, ename, deptno, sal, AVG(sal) OVER () AS avg_dept_sal FROM emp;
 
+#### 201.	Salary of an employee together with the department's minimum wage.
 
+###### SELECT empno, ename, deptno, sal, MIN(sal) OVER (PARTITION BY deptno order by sal) AS min_dept_sal FROM emp ;
 
-<h5> </h5>
+#### 202.	Salary of an employee together with the difference between his or her salary and the department's minimum wage.
+
+###### SELECT empno, ename, deptno, sal, sal - MIN(sal) OVER (PARTITION BY deptno order by sal) AS diff_min FROM emp ;
+
+#### 203.	Salary of an employee together with the highest salary of all employees hired up to that day.
+
+###### SELECT empno, hiredate, ename, sal, MAX(sal) OVER (order by hiredate) AS max FROM emp ;
+
+#### 204.	Salary of an employee together with the average between the salary 1) of the employee hired before, 2) of the employee himself/herself, and 3) of the employee hired after.
+
+###### SELECT empno, hiredate, ename, sal, AVG(sal) OVER (order by hiredate rows between 1 preceding and 1 following ) AS avg FROM emp ;
+
+#### 205.	Salary of an employee together with the average between the salary 1) of the employees hired on the last date that there was hiring prior to the employee's 2) of the employee himself/herself and the employees hired on the same day, and 3) of the employees hired on the next date of hire after the employee's date of hire.
+
+###### CREATE VIEW IF NOT EXISTS ranked as SELECT dense_rank() OVER( ORDER BY hiredate ) rank, empno, hiredate, ename, sal FROM emp ;
+
+###### SELECT * FROM ranked ;
+
+###### SELECT empno, hiredate, ename, sal, AVG(sal) OVER (order by rank range between 1 preceding and 1 following ) AS avg FROM ranked ;
+
+#### 206.	For each employee, average wages of employees hired before, employee's wages, average wages of employees hired after.
+
+###### SELECT empno, hiredate, ename, avg(sal) OVER (order by hiredate rows between unbounded preceding and 1 preceding ) AS avgBefore, sal, avg(sal) OVER (order by hiredate rows between 1 following and unbounded following ) AS avgAfter FROM emp ;
