@@ -893,8 +893,7 @@ publisher.
 
 #### 185.	Example table
 
-###### CREATE TABLE test_scores (
- name varchar(20), test varchar(20), score tinyint );
+###### CREATE TABLE test_scores ( name varchar(20), test varchar(20), score tinyint );
 
 ###### INSERT INTO test_scores VALUES ("Steve", "SQL", 75), ("Robert", "SQL", 43), ("Tracy", "SQL", 56), ("Tatiana", "SQL", 87), ("Steve", "Tuning", 83), ("Robert", "Tuning", 31), ("Tracy", "Tuning", 88), ("Tatiana", "Tuning", 83);
 
@@ -904,7 +903,7 @@ publisher.
 
 #### 187.	Average by name.
 
-SELECT name, test, score, AVG(score) OVER (PARTITION BY name) AS avgname FROM test_scores;
+###### SELECT name, test, score, AVG(score) OVER (PARTITION BY name) AS avgname FROM test_scores;
 
 #### 188.	Average by test and name
 
