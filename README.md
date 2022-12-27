@@ -7,7 +7,8 @@
 
 #### Table authors
 
-<h6> CREATE TABLE authors (
+```
+ CREATE TABLE authors (
  au_id CHAR(3) NOT NULL,
  au_fname VARCHAR(15) NOT NULL,
  au_lname VARCHAR(15) NOT NULL,
@@ -19,7 +20,8 @@
  CONSTRAINT authors_pk
  PRIMARY KEY (au_id),
  CONSTRAINT authors_unique1
- UNIQUE (au_fname, au_lname)); </h6>
+ UNIQUE (au_fname, au_lname));
+ ```
  
 <h6>INSERT INTO authors(au_id,au_fname,au_lname,phone,address,city,state,zip)
  values ('A07','Paddy',"O'Furniture",'941-925-0752','1442 Main St','Sarasota','FL','34236'); </h6>
