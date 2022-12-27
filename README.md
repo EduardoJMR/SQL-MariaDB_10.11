@@ -918,7 +918,7 @@ SELECT pub_id, type, COUNT(*) AS count FROM titles GROUP BY pub_id, type HAVING 
 publisher.
 
 ```
-######	SELECT au_id, authors.city FROM authors INNER JOIN publishers ON authors.city = publishers.city;
+SELECT au_id, authors.city FROM authors INNER JOIN publishers ON authors.city = publishers.city;
 ```
 
 ### Creation of table aliases using AS
